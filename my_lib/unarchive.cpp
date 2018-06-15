@@ -22,8 +22,8 @@ int unarchive::get_bit(unsigned char* a, int i) {
     try {
         int k = i / 8, t = 7 - i % 8;
         ans = (a[k] >> t) & 1;
-    } catch(...) {
-        throw std::runtime_error("");
+    } catch(std::runtime_error e) {
+        throw std::runtime_error("incorrect data");
     }
     return ans;
 }
@@ -55,7 +55,7 @@ void unarchive::build_tree(unsigned char *buf) {
     }
 }
 
-void unarchive::get_original(unsigned char* buf, unsigned long long input_size, std::vector<unsigned char>& orig) {
+void unarchive::get_original(unsigned char* buf, int input_size, std::vector<unsigned char>& orig) {
     input_size = input_size * 8 - ind;
     unsigned long long i = 0;
     for (; i < input_size; i++) {
