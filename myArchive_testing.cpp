@@ -23,13 +23,13 @@ std::vector<unsigned char> do_unarchive(std::vector<unsigned char>& code) {
     std::vector<unsigned char> decode;
     unarchive unarch;
     unarch.build_tree(code.data());
-    unarch.get_original(code.data(), code.size(), decode);
+    unarch.get_original(code.data(), static_cast<int>(code.size()), decode);
     return decode;
 }
 
+
 TEST(correctness, null) {
-    std::string test_string;
-    std::vector<unsigned char> orig(test_string.begin(), test_string.end());
+    std::vector<unsigned char> orig;
     std::vector<unsigned char> code = do_archive(orig);
     std::vector<unsigned char> decode = do_unarchive(code);
     EXPECT_EQ(orig, decode);
@@ -51,3 +51,16 @@ TEST(correctness, few_letter) {
     EXPECT_EQ(orig, decode);
 }
 
+TEST(correctness, many_letter) {
+    std::vector<unsigned char> orig;
+    int pow2 = 1;
+    for (unsigned char i = 'a'; i <= 'k'; i++) {
+        for (int j = 0; j <= pow2; j++) {
+            orig.push_back(i);
+        }
+        pow2 *= 2;
+    }
+    std::vector<unsigned char> code = do_archive(orig);
+    std::vector<unsigned char> decode = do_unarchive(code);
+    EXPECT_EQ(orig, decode);
+}
