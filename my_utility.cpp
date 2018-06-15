@@ -53,25 +53,25 @@ void do_unarchive(string& input, string& output) {
     try {
         unarch.build_tree(buf);
     } catch(std::runtime_error e) {
-        cerr << "this is not my_arhive";
+        cerr << e.what();
         in.close();
         out.close();
         return;
     }
     vector<unsigned char> data;
     try {
-         unarch.get_original(buf, in.gcount(), data);
+         unarch.get_original(buf, static_cast<int>(in.gcount()), data);
     } catch(std::runtime_error e) {
-        cerr << "incorrect data";
+        cerr << e.what();
     }
     out.write((char *)data.data(), data.size());
     data.clear();
     while (in) {
         in.read((char *)buf, sizeof(buf));
         try {
-            unarch.get_original(buf, in.gcount(), data);
+            unarch.get_original(buf, static_cast<int>(in.gcount()), data);
         } catch(std::runtime_error e) {
-            cerr << "incorrect data";
+            cerr << e.what();
         }
         out.write((char *)data.data(), data.size());
         data.clear();
