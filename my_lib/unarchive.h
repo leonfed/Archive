@@ -14,9 +14,9 @@ struct unarchive {
     
     ~unarchive();
 
-    void build_tree(unsigned char*);
+    void build_tree(unsigned char* buf);
 
-    void get_original(unsigned char*, unsigned long long, std::vector<unsigned char>&);
+    void get_original(unsigned char* buf, int size_buf, std::vector<unsigned char>& decode);
 
 private:
     void dfs_delete(Node*);
