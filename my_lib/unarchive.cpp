@@ -10,7 +10,7 @@ unarchive::unarchive()
 {}
 
 void unarchive::dfs_delete(Node* root) {
-    if (!tree) {
+    if (!root) {
         return;
     }
     if (root->left) {
@@ -71,7 +71,7 @@ Node* unarchive::dfs_build_tree(unsigned char* buf, int length) {
 void unarchive::build_tree(unsigned char *buf) {
     cur = tree = dfs_build_tree(buf, 0);
     if (!tree) {
-        throw std::runtime_error("incorrect dara");
+        throw std::runtime_error("incorrect data");
     }
     if (ind % 8 != 0) {
         ind += (8 - ind % 8);
@@ -82,6 +82,9 @@ void unarchive::get_original(unsigned char* buf, int input_size, std::vector<uns
     input_size = input_size * 8 - ind;
     int i = 0;
     for (; i < input_size; i++) {
+        if (!cur) {
+            throw std::runtime_error("incorrect data");
+        }
         if (get_bit(buf, ind++)) {
             cur = cur->right;
         } else {
