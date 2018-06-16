@@ -45,15 +45,22 @@ void do_archive(string& input, string& output) {
 }
 
 void do_unarchive(string& input, string& output) {
-    ifstream in(input, ios::binary);
+    ifstream in;
+    try {
+        in = ifstream(input, ios::binary);
+    } catch (...) {
+        cerr << "Can't open file";
+        in.close();
+        return;
+    }
     ofstream out(output, ios::binary);
     unsigned char buf[size_buf];
     in.read((char *)buf, sizeof(buf));
     unarchive unarch;
     try {
         unarch.build_tree(buf);
-    } catch(std::runtime_error& e) {
-        cerr << e.what();
+    } catch(...) {
+        cerr << "Incorrect data";
         in.close();
         out.close();
         return;
@@ -61,8 +68,11 @@ void do_unarchive(string& input, string& output) {
     vector<unsigned char> data;
     try {
          unarch.get_original(buf, static_cast<int>(in.gcount()), data);
-    } catch(std::runtime_error& e) {
-        cerr << e.what();
+    } catch(...) {
+        cerr << "Incorrect data";
+        in.close();
+        out.close();
+        return;
     }
     out.write((char *)data.data(), data.size());
     data.clear();
@@ -70,8 +80,11 @@ void do_unarchive(string& input, string& output) {
         in.read((char *)buf, sizeof(buf));
         try {
             unarch.get_original(buf, static_cast<int>(in.gcount()), data);
-        } catch(std::runtime_error& e) {
-            cerr << e.what();
+        } catch(...) {
+            cerr << "Incorrect data";
+            in.close();
+            out.close();
+            return;
         }
         out.write((char *)data.data(), data.size());
         data.clear();
