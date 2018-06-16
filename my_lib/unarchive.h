@@ -8,9 +8,7 @@
 
 struct unarchive {
 
-    unarchive()
-            : ind(0)
-    {}
+    unarchive();
     
     ~unarchive();
 
