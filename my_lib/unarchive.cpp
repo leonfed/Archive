@@ -28,7 +28,7 @@ int unarchive::get_bit(unsigned char* a, int i) {
     try {
         int k = i / 8, t = 7 - i % 8;
         ans = (a[k] >> t) & 1;
-    } catch(std::runtime_error& e) {
+    } catch(...) {
         throw std::runtime_error("incorrect data");
     }
     return ans;
