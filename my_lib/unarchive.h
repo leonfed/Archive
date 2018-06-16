@@ -14,6 +14,8 @@ struct unarchive {
 
     void get_original(unsigned char* buf, int size_buf, std::vector<unsigned char>& decode);
 
+    bool check_correctness();
+
 private:
     int get_bit(unsigned char* buf, int index);
     std::shared_ptr<Node> dfs_build_tree(unsigned char* buf, int length);
@@ -21,6 +23,7 @@ private:
     std::shared_ptr<Node> tree;
     std::shared_ptr<Node> cur;
     int ind;
+    bool last_symbol_is_final;
 };
 
 #endif

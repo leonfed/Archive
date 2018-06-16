@@ -82,6 +82,9 @@ void do_unarchive(string& input, string& output) {
         out.write((char *)data.data(), data.size());
         data.clear();
     }
+    if (!unarch.check_correctness()) {
+        cerr << "Incorrect data";
+    }
     in.close();
     out.close();
 }

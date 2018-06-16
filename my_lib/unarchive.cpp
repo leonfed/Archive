@@ -57,6 +57,7 @@ void unarchive::get_original(unsigned char* buf, int input_size, std::vector<uns
         if (!cur) {
             throw std::runtime_error("incorrect data");
         }
+        last_symbol_is_final = false;
         if (get_bit(buf, ind++)) {
             cur = cur->right;
         } else {
@@ -70,9 +71,14 @@ void unarchive::get_original(unsigned char* buf, int input_size, std::vector<uns
                     i += (8 - ind % 8);
                     ind += (8 - ind % 8);
                 }
+                last_symbol_is_final = true;
             }
             cur = tree;
         }
     }
     ind = 0;
+}
+
+bool unarchive::check_correctness() {
+    return last_symbol_is_final;
 }
