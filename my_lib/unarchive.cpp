@@ -22,7 +22,7 @@ int unarchive::get_bit(unsigned char* a, int i) {
 
 std::shared_ptr<Node> unarchive::dfs_build_tree(unsigned char* buf, int length) {
     if (length > 64) {
-        return nullptr;
+        throw std::runtime_error("incorrect data");
     }
     std::shared_ptr<Node> root = std::make_shared<Node>(Node(1, nullptr, nullptr, 0));
     if (get_bit(buf, ind++)) {
@@ -38,22 +38,13 @@ std::shared_ptr<Node> unarchive::dfs_build_tree(unsigned char* buf, int length) 
         }
     } else {
         root->left = dfs_build_tree(buf, length + 1);
-        if (!root->left) {
-            return nullptr;
-        }
         root->right = dfs_build_tree(buf, length + 1);
-        if (!root->right) {
-            return nullptr;
-        }
     }
     return root;
 }
 
 void unarchive::build_tree(unsigned char *buf) {
     cur = tree = dfs_build_tree(buf, 0);
-    if (!tree) {
-        throw std::runtime_error("incorrect data");
-    }
     if (ind % 8 != 0) {
         ind += (8 - ind % 8);
     }
