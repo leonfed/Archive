@@ -52,7 +52,7 @@ void do_unarchive(string& input, string& output) {
     unarchive unarch;
     try {
         unarch.build_tree(buf);
-    } catch(std::runtime_error e) {
+    } catch(std::runtime_error& e) {
         cerr << e.what();
         in.close();
         out.close();
@@ -61,7 +61,7 @@ void do_unarchive(string& input, string& output) {
     vector<unsigned char> data;
     try {
          unarch.get_original(buf, static_cast<int>(in.gcount()), data);
-    } catch(std::runtime_error e) {
+    } catch(std::runtime_error& e) {
         cerr << e.what();
     }
     out.write((char *)data.data(), data.size());
@@ -70,7 +70,7 @@ void do_unarchive(string& input, string& output) {
         in.read((char *)buf, sizeof(buf));
         try {
             unarch.get_original(buf, static_cast<int>(in.gcount()), data);
-        } catch(std::runtime_error e) {
+        } catch(std::runtime_error& e) {
             cerr << e.what();
         }
         out.write((char *)data.data(), data.size());
