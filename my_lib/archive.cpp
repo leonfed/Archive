@@ -7,11 +7,14 @@ archive::archive()
         : cnt(256, 0)
         , tree(nullptr)
         , byte_code(256)
+        , final_byte({0, 0})
+        , check_xor(0)
 {}
 
 void archive::count(unsigned char *data, int length) {
     for (int i = 0; i < length; i++) {
         cnt[data[i]]++;
+        check_xor ^= data[i];
     }
 }
 
@@ -70,10 +73,11 @@ void dfs_get_tree_code(std::vector<bool>& code, std::shared_ptr<Node> v) {
     }
 }
 
-void archive::get_tree_code(std::vector<unsigned char>& code_char) {
+void archive::get_tree_code_and_check_xor(std::vector<unsigned char>& code_char) {
     std::vector<bool> code;
     dfs_get_tree_code(code, tree);
     convert_bool_to_char(code, code_char);
+    code_char.push_back(check_xor);
 }
 
 void archive::convert_bool_to_char(std::vector<bool>& code_vector, std::vector<unsigned char>& code_char) {

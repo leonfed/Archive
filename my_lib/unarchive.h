@@ -27,6 +27,7 @@ private:
     std::shared_ptr<Node> cur;
     int ind;
     bool last_symbol_is_final;
+    unsigned char check_xor, cur_xor;
 };
 
 #endif

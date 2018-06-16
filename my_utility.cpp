@@ -25,7 +25,7 @@ void do_archive(string& input, string& output) {
     } while (in);
     arch.generate_code();
     vector<unsigned char> code_char;
-    arch.get_tree_code(code_char);
+    arch.get_tree_code_and_check_xor(code_char);
     out.write((char *)code_char.data(), code_char.size());
     code_char.clear();
     do {

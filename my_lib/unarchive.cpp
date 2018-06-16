@@ -7,7 +7,9 @@ unarchive::unarchive()
         : tree(nullptr)
         , cur(nullptr)
         , ind(0)
-        , last_symbol_is_final(false)        
+        , last_symbol_is_final(false)
+        , check_xor(0)
+        , cur_xor(0)
 {}
 
 int unarchive::get_bit(unsigned char* a, int i) {
@@ -49,6 +51,9 @@ void unarchive::build_tree(unsigned char *buf) {
     if (ind % 8 != 0) {
         ind += (8 - ind % 8);
     }
+    int k = ind / 8;
+    check_xor = buf[k];
+    ind += 8;
 }
 
 void unarchive::get_original(unsigned char* buf, int input_size, std::vector<unsigned char>& orig) {
@@ -67,6 +72,7 @@ void unarchive::get_original(unsigned char* buf, int input_size, std::vector<uns
         if (!cur->left) {
             if (cur->count != 0) {
                 orig.push_back(cur->byte);
+                cur_xor ^= cur->byte;
             } else {
                 if (ind % 8 != 0) {
                     i += (8 - ind % 8);
@@ -81,5 +87,5 @@ void unarchive::get_original(unsigned char* buf, int input_size, std::vector<uns
 }
 
 bool unarchive::check_correctness() {
-    return last_symbol_is_final;
+    return (last_symbol_is_final && (check_xor == cur_xor));
 }

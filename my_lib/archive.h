@@ -15,8 +15,8 @@ struct archive {
     //generate huffman tree
     void generate_code();
 
-    //write code of tree to vector<unsigned char>code
-    void get_tree_code(std::vector<unsigned char>& code);
+    //write code of tree and check_xor to vector<unsigned char>code
+    void get_tree_code_and_check_xor(std::vector<unsigned char>& code);
 
     //write code of buf to vector<unsigned char>code
     void get_data_code(unsigned char* buf, int size_buf, std::vector<unsigned char>& code);
@@ -31,6 +31,7 @@ private:
     std::shared_ptr<Node> tree;
     std::vector<std::pair<unsigned long long, int>> byte_code;
     std::pair<unsigned long long, int> final_byte;
+    unsigned char check_xor;
 };
 
 #endif

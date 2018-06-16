@@ -15,7 +15,7 @@ std::vector<unsigned char> do_archive(std::vector<unsigned char>& orig) {
     archive arch;
     arch.count(orig.data(), static_cast<int>(orig.size()));
     arch.generate_code();
-    arch.get_tree_code(code);
+    arch.get_tree_code_and_check_xor(code);
     arch.get_data_code(orig.data(), static_cast<int>(orig.size()), code);
     return code;
 }
