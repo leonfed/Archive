@@ -7,6 +7,7 @@ unarchive::unarchive()
         : tree(nullptr)
         , cur(nullptr)
         , ind(0)
+        , last_symbol_is_final(false)        
 {}
 
 int unarchive::get_bit(unsigned char* a, int i) {
