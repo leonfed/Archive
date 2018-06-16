@@ -9,9 +9,16 @@
 struct archive {
     archive();
 
+    //count symbols and check_xor
     void count(unsigned char* buf, int size_buf);
+
+    //generate huffman tree
     void generate_code();
+
+    //write code of tree to vector<unsigned char>code
     void get_tree_code(std::vector<unsigned char>& code);
+
+    //write code of buf to vector<unsigned char>code
     void get_data_code(unsigned char* buf, int size_buf, std::vector<unsigned char>& code);
 
 

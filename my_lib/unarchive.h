@@ -10,10 +10,13 @@ struct unarchive {
 
     unarchive();
 
+    //build huffman tree
     void build_tree(unsigned char* buf);
 
+    //write original data to vector<unsigned char>decode
     void get_original(unsigned char* buf, int size_buf, std::vector<unsigned char>& decode);
 
+    //check_correctness of input data
     bool check_correctness();
 
 private:
