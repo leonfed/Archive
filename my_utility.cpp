@@ -86,13 +86,13 @@ void do_unarchive(string& input, string& output) {
     out.close();
 }
 
-int main() {
-    char command;
-    string input, output;
-    cin >> command >> input >> output;
-    if (command == 'c') {
+int main(int argc, char **argv) {
+    char c = *argv[1];
+    string input(argv[2]);
+    string output(argv[3]);
+    if (c == 'c') {
         do_archive(input, output);
-    } else if (command == 'd') {
+    } else if (c == 'd') {
         do_unarchive(input, output);
     }
     return 0;
