@@ -6,10 +6,7 @@
 #include "tree.h"
 
 struct archive {
-    archive()
-            : cnt(256, 0)
-            , byte_code(256)
-    {}
+    archive();
 
     ~archive();
 
