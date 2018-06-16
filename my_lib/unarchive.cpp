@@ -10,17 +10,20 @@ unarchive::unarchive()
 {}
 
 void unarchive::dfs_delete(Node* root) {
+    if (!tree) {
+        return;
+    }
     if (root->left) {
         dfs_delete(root->left);
+    }
+    if (root->right) {
         dfs_delete(root->right);
     }
     delete root;
 }
 
 unarchive::~unarchive() {
-    if (tree) {
-        dfs_delete(tree);
-    }
+    dfs_delete(tree);
 }
 
 int unarchive::get_bit(unsigned char* a, int i) {
@@ -34,7 +37,10 @@ int unarchive::get_bit(unsigned char* a, int i) {
     return ans;
 }
 
-Node* unarchive::dfs_build_tree(unsigned char* buf) {
+Node* unarchive::dfs_build_tree(unsigned char* buf, int length) {
+    if (length > 64) {
+        return nullptr;
+    }
     Node* root = new Node{ 1, nullptr, nullptr, 0 };
     if (get_bit(buf, ind++)) {
         if (get_bit(buf, ind++)) {
@@ -48,14 +54,25 @@ Node* unarchive::dfs_build_tree(unsigned char* buf) {
             ind += 8;
         }
     } else {
-        root->left = dfs_build_tree(buf);
-        root->right = dfs_build_tree(buf);
+        root->left = dfs_build_tree(buf, length + 1);
+        if (!root->left) {
+            dfs_delete(root);
+            return nullptr;
+        }
+        root->right = dfs_build_tree(buf, length + 1);
+        if (!root->right) {
+            dfs_delete(root);
+            return nullptr;
+        }
     }
     return root;
 }
 
 void unarchive::build_tree(unsigned char *buf) {
-    cur = tree = dfs_build_tree(buf);
+    cur = tree = dfs_build_tree(buf, 0);
+    if (!tree) {
+        throw std::runtime_error("incorrect dara");
+    }
     if (ind % 8 != 0) {
         ind += (8 - ind % 8);
     }

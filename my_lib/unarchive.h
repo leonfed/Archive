@@ -19,7 +19,7 @@ struct unarchive {
 private:
     void dfs_delete(Node*);
     int get_bit(unsigned char*, int);
-    Node* dfs_build_tree(unsigned char*);
+    Node* dfs_build_tree(unsigned char*, int);
 
     Node* tree;
     Node* cur;
