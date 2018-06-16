@@ -63,7 +63,7 @@ void unarchive::build_tree(unsigned char *buf) {
 
 void unarchive::get_original(unsigned char* buf, int input_size, std::vector<unsigned char>& orig) {
     input_size = input_size * 8 - ind;
-    unsigned long long i = 0;
+    int i = 0;
     for (; i < input_size; i++) {
         if (get_bit(buf, ind++)) {
             cur = cur->right;
