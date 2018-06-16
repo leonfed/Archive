@@ -3,12 +3,11 @@
 
 #include <iostream>
 #include <vector>
+#include <debug/vector>
 #include "tree.h"
 
 struct archive {
     archive();
-
-    ~archive();
 
     void count(unsigned char* buf, int size_buf);
     void generate_code();
@@ -17,13 +16,12 @@ struct archive {
 
 
 private:
-    void dfs_delete(Node*);
-    void dfs_fill_byte_code(std::pair<unsigned long long, int>&, Node*);
-    void convert_bool_to_char(std::vector<bool>&, std::vector<unsigned char>&);
-    void convert_long_to_char(std::vector<std::pair<unsigned long long, int>>&, std::vector<unsigned char>&);
+    void dfs_fill_byte_code(std::pair<unsigned long long, int>& , std::shared_ptr<Node>);
+    void convert_bool_to_char(std::vector<bool>& code_bool, std::vector<unsigned char>& code_char);
+    void convert_long_to_char(std::vector<std::pair<unsigned long long, int>>& code_long, std::vector<unsigned char>& code_char);
 
     std::vector<unsigned long long> cnt;
-    Node* tree;
+    std::shared_ptr<Node> tree;
     std::vector<std::pair<unsigned long long, int>> byte_code;
     std::pair<unsigned long long, int> final_byte;
 };

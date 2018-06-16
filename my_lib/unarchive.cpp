@@ -9,23 +9,6 @@ unarchive::unarchive()
         , ind(0)
 {}
 
-void unarchive::dfs_delete(Node* root) {
-    if (!root) {
-        return;
-    }
-    if (root->left) {
-        dfs_delete(root->left);
-    }
-    if (root->right) {
-        dfs_delete(root->right);
-    }
-    delete root;
-}
-
-unarchive::~unarchive() {
-    dfs_delete(tree);
-}
-
 int unarchive::get_bit(unsigned char* a, int i) {
     int ans;
     try {
@@ -37,11 +20,11 @@ int unarchive::get_bit(unsigned char* a, int i) {
     return ans;
 }
 
-Node* unarchive::dfs_build_tree(unsigned char* buf, int length) {
+std::shared_ptr<Node> unarchive::dfs_build_tree(unsigned char* buf, int length) {
     if (length > 64) {
         return nullptr;
     }
-    Node* root = new Node{ 1, nullptr, nullptr, 0 };
+    std::shared_ptr<Node> root = std::make_shared<Node>(Node(1, nullptr, nullptr, 0));
     if (get_bit(buf, ind++)) {
         if (get_bit(buf, ind++)) {
             root->count = 0;
@@ -56,12 +39,10 @@ Node* unarchive::dfs_build_tree(unsigned char* buf, int length) {
     } else {
         root->left = dfs_build_tree(buf, length + 1);
         if (!root->left) {
-            dfs_delete(root);
             return nullptr;
         }
         root->right = dfs_build_tree(buf, length + 1);
         if (!root->right) {
-            dfs_delete(root);
             return nullptr;
         }
     }

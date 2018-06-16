@@ -9,27 +9,13 @@ archive::archive()
         , byte_code(256)
 {}
 
-void archive::dfs_delete(Node* root) {
-    if (root->left) {
-        dfs_delete(root->left);
-        dfs_delete(root->right);
-    }
-    delete root;
-}
-
-archive::~archive() {
-    if (tree) {
-        dfs_delete(tree);
-    }
-}
-
 void archive::count(unsigned char *data, int length) {
     for (int i = 0; i < length; i++) {
         cnt[data[i]]++;
     }
 }
 
-void archive::dfs_fill_byte_code(std::pair<unsigned long long, int>& cur_code, Node* v) {
+void archive::dfs_fill_byte_code(std::pair<unsigned long long, int>& cur_code, std::shared_ptr<Node> v) {
     if (v->left) {
         cur_code = {cur_code.first * 2, cur_code.second + 1};
         dfs_fill_byte_code(cur_code, v->left);
@@ -46,27 +32,27 @@ void archive::dfs_fill_byte_code(std::pair<unsigned long long, int>& cur_code, N
 }
 
 void archive::generate_code() {
-    auto cmp = [](Node* a, Node* b) { return a->count < b->count; };
-    std::multiset<Node*, decltype(cmp)> nd(cmp);
-    nd.insert(new Node{ 0, nullptr, nullptr, 0 });
+    auto cmp = [](std::shared_ptr<Node> a, std::shared_ptr<Node> b) { return a->count < b->count; };
+    std::multiset<std::shared_ptr<Node>, decltype(cmp)> nd(cmp);
+    nd.insert(std::make_shared<Node>(Node(0, nullptr, nullptr, 0)));
     for (int i = 0; i < 256; i++) {
         if (cnt[i] != 0) {
-            nd.insert(new Node{ cnt[i], nullptr, nullptr, (unsigned char)i });
+            nd.insert(std::make_shared<Node>(Node(cnt[i], nullptr, nullptr, (unsigned char)i)));
         }
     }
     while (nd.size() > 1) {
-        Node *min1 = *nd.begin();
+        std::shared_ptr<Node> min1 = *nd.begin();
         nd.erase(nd.begin());
-        Node *min2 = *nd.begin();
+        std::shared_ptr<Node> min2 = *nd.begin();
         nd.erase(nd.begin());
-        nd.insert(new Node{ min1->count + min2->count, min1, min2, 0 });
+        nd.insert(std::make_shared<Node>(Node(min1->count + min2->count, min1, min2, 0)));
     }
     tree = *nd.begin();
     std::pair<unsigned long long, int> cur_code;
     dfs_fill_byte_code(cur_code, tree);
 }
 
-void dfs_get_tree_code(std::vector<bool>& code, Node* v) {
+void dfs_get_tree_code(std::vector<bool>& code, std::shared_ptr<Node> v) {
     if (v->left) {
         code.push_back(false);
         dfs_get_tree_code(code, v->left);
