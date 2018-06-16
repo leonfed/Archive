@@ -3,6 +3,12 @@
 #include <iostream>
 #include <set>
 
+archive::archive()
+        : cnt(256, 0)
+        , byte_code(256)
+        , tree(nullptr)
+{}
+
 void archive::dfs_delete(Node* root) {
     if (root->left) {
         dfs_delete(root->left);
@@ -62,11 +68,11 @@ void archive::generate_code() {
 
 void dfs_get_tree_code(std::vector<bool>& code, Node* v) {
     if (v->left) {
-        code.push_back(0);
+        code.push_back(false);
         dfs_get_tree_code(code, v->left);
         dfs_get_tree_code(code, v->right);
     } else {
-        code.push_back(1);
+        code.push_back(true);
         code.push_back(v->count == 0);
         if (v->count > 0) {
             unsigned char byte = v->byte;
@@ -76,6 +82,12 @@ void dfs_get_tree_code(std::vector<bool>& code, Node* v) {
             }
         }
     }
+}
+
+void archive::get_tree_code(std::vector<unsigned char>& code_char) {
+    std::vector<bool> code;
+    dfs_get_tree_code(code, tree);
+    convert_bool_to_char(code, code_char);
 }
 
 void archive::convert_bool_to_char(std::vector<bool>& code_vector, std::vector<unsigned char>& code_char) {
@@ -98,12 +110,6 @@ void archive::convert_bool_to_char(std::vector<bool>& code_vector, std::vector<u
     }
 }
 
-void archive::get_tree_code(std::vector<unsigned char>& code_char) {
-    std::vector<bool> code;
-    dfs_get_tree_code(code, tree);
-    convert_bool_to_char(code, code_char);
-}
-
 void archive::get_data_code(unsigned char* data, int length, std::vector<unsigned char>& code_char) {
     std::vector<std::pair<unsigned long long, int>> code_vector;
     for (int i = 0; i < length; i++) {
@@ -112,8 +118,6 @@ void archive::get_data_code(unsigned char* data, int length, std::vector<unsigne
     code_vector.push_back(final_byte);
     convert_long_to_char(code_vector, code_char);
 }
-
-
 
 void archive::convert_long_to_char(std::vector<std::pair<unsigned long long, int>>& code_vector, std::vector<unsigned char>& code_char) {
     int rest = 8;
