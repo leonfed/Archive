@@ -90,13 +90,22 @@ void do_unarchive(string& input, string& output) {
 }
 
 int main(int argc, char **argv) {
-    char c = *argv[1];
-    string input(argv[2]);
-    string output(argv[3]);
+    char c;
+    string input, output;
+    try {
+        c = *argv[1];
+        input = string(argv[2]);
+        output = string(argv[3]);
+    } catch(...) {
+        cerr << "incorrect command";
+        return 0;
+    }
     if (c == 'c') {
         do_archive(input, output);
     } else if (c == 'd') {
         do_unarchive(input, output);
+    } else {
+        cerr << "incorrect command";
     }
     return 0;
 }
