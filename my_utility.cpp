@@ -9,18 +9,13 @@ using namespace std;
 const int size_buf = 4000000;
 
 void do_archive(string& input, string& output) {
-    ifstream in, in2;
-
-    try {
-        in = ifstream(input, ios::binary);
-        in2 = ifstream(input, ios::binary);
-    } catch(...) {
+    ifstream in(input, ios::binary);
+    ifstream in2(input, ios::binary);
+    if (!in) {
         cerr << "Can't open file";
         in.close();
-        in2.close();
         return;
     }
-
     ofstream out(output, ios::binary);
     unsigned char buf[size_buf];
     archive arch;
@@ -45,10 +40,8 @@ void do_archive(string& input, string& output) {
 }
 
 void do_unarchive(string& input, string& output) {
-    ifstream in;
-    try {
-        in = ifstream(input, ios::binary);
-    } catch (...) {
+    ifstream in(input, ios::binary);
+    if (!in) {
         cerr << "Can't open file";
         in.close();
         return;
