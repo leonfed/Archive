@@ -4,9 +4,9 @@
 #include "unarchive.h"
 
 unarchive::unarchive()
-        : ind(0)
-        , tree(nullptr)
+        : tree(nullptr)
         , cur(nullptr)
+        , ind(0)
 {}
 
 void unarchive::dfs_delete(Node* root) {

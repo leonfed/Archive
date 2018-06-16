@@ -5,8 +5,8 @@
 
 archive::archive()
         : cnt(256, 0)
-        , byte_code(256)
         , tree(nullptr)
+        , byte_code(256)
 {}
 
 void archive::dfs_delete(Node* root) {
